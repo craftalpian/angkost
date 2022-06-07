@@ -1,8 +1,7 @@
-import requests as rs
-import numpy as np
 import tkinter as tk
-from tkinter import Label, ttk as ttk, Button, PhotoImage
+from tkinter import Label, ttk as ttk, Button, PhotoImage, messagebox
 from tkinter.font import Font
+from turtle import home, title, update
 from PIL import ImageTk, Image
 
 root = tk.Tk(screenName="Angkost")
@@ -12,39 +11,36 @@ root.resizable(False, False)
 root.iconbitmap("./assets/angkost-icon.ico")
 root.configure(background="white")
 
-frm = ttk.Frame(root)
-image = Image.open("./assets/LogoSample_ByTailorBrands.jpg")
-image = image.resize((210, 210), Image.ANTIALIAS)
-photo = ImageTk.PhotoImage(image)
-image_label = ttk.Label(
-    root,
-    image=photo,
-    padding=5,
-    background="white"
-)
-image_label.pack(pady=(38, 0))
+screen = "home"
 
-judul = Label(root, text="Halo, selamat datang di Angkost",
-              font=Font(family="Montserrat Medium", size=22, weight="normal"), background="white")
-judul.pack(pady=(16, 0))
+frame = ttk.Frame(root)
 
-deskripsi = Label(root, text="Angkost akan membantu Anda dalam mencari barang kebutuhan di kost. Silakan tekan tombol di bawah ini untuk melanjutkan.",
-                  font=Font(family="Montserrat Medium", size=12), background="white", wraplength=540, justify="center", fg="#4F4F4F")
-deskripsi.pack(pady=(16, 0), padx=52)
+def update_screen():
+    global screen
+    screen = "goods"
 
+if screen == "home":
+    # Home
+    logo_angkost = Image.open("./assets/LogoSample_ByTailorBrands.jpg")
+    resize_logo_angkost = logo_angkost.resize((210, 210), Image.ANTIALIAS)
+    tkinter_logo_angkost = ImageTk.PhotoImage(resize_logo_angkost)
+    logo_label = ttk.Label(
+        root,
+        image=tkinter_logo_angkost,
+        padding=5,
+        background="white"
+    )
+    logo_label.pack(pady=(38, 0))
 
-def selanjutnya(e):
-    print("ditekan")
+    title = Label(root, text="Halo, selamat datang di Angkost", font=Font(
+                family="Montserrat Medium", size=22, weight="normal"), background="white")
+    title.pack(pady=(16, 0))
 
-loginImg = PhotoImage(file="./assets/mulai.png")
+    description = Label(root, text="Angkost akan membantu Anda dalam mencari barang kebutuhan di kost. Silakan tekan tombol di bawah ini untuk melanjutkan.", font=Font(family="Montserrat Medium", size=12), background="white", wraplength=540, justify="center", fg="#4F4F4F")
+    description.pack(pady=(16, 0), padx=52)
 
-loginBtn = Button(root, image=loginImg, command=selanjutnya("a"), borderwidth=0)
-# button1 = Button(root, text="Mulai", command=selanjutnya(
-#     'test'), font=Font(family="Montserrat Bold", size=12), bg="#525252", fg="white", width=15, height=1, borderwidth=1)
-# button1.config(height=28,
-# 			  width=113)
-# put on screen
-# pady=(16, 0), padx=52
-loginBtn.pack(pady=(50, 0))
+    mulai_image = PhotoImage(file="./assets/mulai.png")
+    login_button = Button(root, image=mulai_image, borderwidth=0, bg="white", command=update_screen)
+    login_button.pack(pady=(50, 0))
 
 root.mainloop()
