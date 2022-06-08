@@ -18,7 +18,7 @@ class tkinterApp(tk.Tk):
 
         self.frames = {}
 
-        for F in (Home, Goods, Budget, Loading):
+        for F in (Home, Goods, Budget, Loading, Result):
             frame = F(container, self)
             self.frames[F] = frame
 
@@ -31,26 +31,33 @@ class tkinterApp(tk.Tk):
         frame.tkraise()
 
 # Home Page
-
-
 class Home(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
+
+        def logo_image(self):
+            img_label = tk.Label(self, borderwidth=0)
+            img_label.image = tk.PhotoImage(file="./assets/LogoSample_ByTailorBrands.jpg")
+            img_label['image'] = img_label.image
+
+            img_label.pack(pady=(38, 0))
 
         # Set background color white
         self.configure(background="white")
 
         # Home
-        logo_angkost = Image.open("./assets/LogoSample_ByTailorBrands.jpg")
-        resize_logo_angkost = logo_angkost.resize((210, 210), Image.ANTIALIAS)
-        tkinter_logo_angkost = ImageTk.PhotoImage(resize_logo_angkost)
-        logo_label = ttk.Label(
-            self,
-            image=tkinter_logo_angkost,
-            padding=5,
-            background="white"
-        )
-        logo_label.pack(pady=(38, 0))
+        # logo_angkost = Image.open("./assets/LogoSample_ByTailorBrands.jpg")
+        # resize_logo_angkost = logo_angkost.resize((210, 210), Image.ANTIALIAS)
+        # tkinter_logo_angkost = ImageTk.PhotoImage(resize_logo_angkost)
+        # logo_label = ttk.Label(
+        #     self,
+        #     image=tkinter_logo_angkost,
+        #     padding=5,
+        #     background="white"
+        # )
+        # logo_label.pack(pady=(38, 0))
+
+        logo_image(self)
 
         title = Label(self, text="Halo, selamat datang di Angkost", font=Font(
             family="Montserrat Medium", size=22, weight="normal"), background="white")
@@ -125,7 +132,7 @@ class Budget(tk.Frame):
 
         mulai_image = PhotoImage(file="./assets/mulai.png")
         login_button = Button(self, text='asnajksn', borderwidth=0,
-                              bg="white", command=lambda: controller.show_frame(Loading))
+                              bg="white", command=lambda: controller.show_frame(Result))
         login_button.pack(pady=(50, 0))
 
 # Loading Screen
@@ -141,9 +148,35 @@ class Loading(tk.Frame):
             family="Montserrat Medium", size=22, weight="normal"), background="white")
         title.pack(pady=(250, 0))
 
-        self.after(5000, lambda: controller.show_frame(Budget))
+        # lambda: controller.show_frame(Result)
+        # self.after(5000, lambda: controller.show_frame(Result))
 
+# Result Screen
+class Result(tk.Frame):
+    def __init__(self, parent, controller):
+        tk.Frame.__init__(self, parent)
+        
+        # Set background color white
+        self.configure(background="white")
 
+        # Budget
+        title = Label(self, text="Angkost menemukan hasil:", font=Font(
+            family="Montserrat Medium", size=22, weight="normal"), background="white")
+        title.pack(pady=(60, 0), padx=20, side= tk.TOP, anchor="w")
+
+        description = Label(self, text="Masukkan budget Anda untuk semua barang tersebut. Harap masukkan dalam rupiah ya!", font=Font(
+            family="Montserrat Medium", size=12), background="white", wraplength=540, justify="center", fg="#4F4F4F")
+        description.pack(pady=(16, 0), padx=52)
+
+        input = Text(self, height=1, width=45, bg="#EDEDED", borderwidth=0,
+                     fg="#625F5F", font=Font(family="Montserrat Regular", size=12))
+        input.config(padx=16, pady=16)
+        input.pack(pady=(30, 0))
+
+        mulai_image = PhotoImage(file="./assets/mulai.png")
+        login_button = Button(self, text='asnajksn', borderwidth=0,
+                              bg="white", command=lambda: controller.show_frame(Loading))
+        login_button.pack(pady=(50, 0))
 
 # Driver Code
 app = tkinterApp()
