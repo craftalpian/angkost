@@ -1,5 +1,5 @@
 import numpy as np
-
+from tabulate import tabulate
 
 def format_price(amount) -> int:
     return int(amount.lower().replace('rp', '').replace('.', ''))
@@ -58,18 +58,41 @@ def final_result(data, data_result, budget):
         stored_score_low[data[x]] = sorted(y, key=lambda x: x[10], reverse=False)
         stored_score_high[data[x]] = sorted(y, key=lambda x: x[10], reverse=True)
 
-    # Sort by price
-    sort_by_price = []
+    # Result
+    result = {}
+
+    # Sort by price - low
+    sort_by_price_low = []
+    # Sort by price - high
+    sort_by_price_high = []
+    # Sort by score - low
+    sort_by_score_low = []
+    # Sort by score - high
+    sort_by_score_high = []
 
     for j in data:
         # cheap
-        sort_by_price.append(stored_price_low[j][0])
+        sort_by_price_low.append(stored_price_low[j][0])
+        sort_by_price_high.append(stored_price_high[j][0])
+        # score recommendation
+        sort_by_score_low.append(stored_score_low[j][0])
+        sort_by_score_high.append(stored_score_high[j][0])
     
+    result["price_low_to_high"] = sort_by_price_low
+    result["price_high_to_low"] = sort_by_price_high
+    result["score_high_to_low"] = sort_by_score_low
+    result["score_high_to_low"] = sort_by_score_high
 
-    print(sort_by_price)
+    table_detail("price_low_to_high", result['price_low_to_high'], budget)
+
     return result
 
     # arr = np.array([1, 2, 3, 4, 5])
     # print(np.sum(arr))
 
-# final_result(1, 1)
+def table_detail(title, data, budget):
+    print(f"\n[{title.upper()}]:")
+    data_new = [[x, y[1], y[5], y[4], y[7], y[10]] for x, y in enumerate(data)]
+    print(tabulate(data_new, headers=["#", "nama", "harga", "penjualan", "bintang", "skor"]))
+    price_total = np.sum(np.array([x[6] for x in data]))
+    print(f"Total: Rp{price_total}\t\tBudget: Rp{budget}\t\tKurang: Rp{budget-price_total}\n")

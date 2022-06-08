@@ -211,7 +211,6 @@ class Result(tk.Frame):
         input.config(padx=16, pady=16)
         input.pack(pady=(30, 0))
 
-        mulai_image = PhotoImage(file="./assets/mulai.png")
         login_button = Button(self, text='asnajksn', borderwidth=0,
                               bg="white", command=lambda: controller.show_frame(Loading))
         login_button.pack(pady=(50, 0))
@@ -229,5 +228,3 @@ app.configure(background="white")
 
 # Loop app
 app.mainloop()
-
-# print(goods_result)
