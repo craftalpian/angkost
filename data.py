@@ -93,4 +93,4 @@ def table_detail(title, data, budget):
     data_new = [[x+1, y[1], y[5], y[4], y[7], y[10]] for x, y in enumerate(data)]
     print(tabulate(data_new, headers=["#", "nama", "harga", "penjualan", "bintang", "skor"]))
     price_total = np.sum(np.array([x[6] for x in data]))
-    print(f"Total: Rp{price_total}\t\tBudget: Rp{budget}\t\tKurang: Rp{budget-price_total}\n")
+    print(f"\nTotal: Rp{price_total}\t\tBudget: Rp{budget}\t\tKurang: Rp{budget-price_total}\n")
