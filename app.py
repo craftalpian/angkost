@@ -22,7 +22,7 @@ class tkinterApp(tk.Tk):
 
         self.frames = {}
 
-        for F in (Home, Goods, Budget, Loading, Result):
+        for F in (Home, Goods, Budget, Result):
             frame = F(container, self)
             self.frames[F] = frame
 
@@ -168,24 +168,6 @@ class Budget(tk.Frame):
                              bg="#525252", fg="white", command=proccess, width=16, height=1, font=Font(
                                  family="Montserrat Bold", size=12, weight="normal"))
         next_button.pack(pady=(60, 0))
-
-# Loading Screen
-
-
-class Loading(tk.Frame):
-    def __init__(self, parent, controller):
-        tk.Frame.__init__(self, parent)
-
-        # Set background color white
-        self.configure(background="white")
-
-        # Budget
-        title = Label(self, text="Data berhasil didapatkan...", font=Font(
-            family="Montserrat Medium", size=22, weight="normal"), background="white")
-        title.pack(pady=(250, 0))
-
-        # lambda: controller.show_frame(Result)
-        # self.after(5000, lambda: controller.show_frame(Result))
 
 # Result Screen
 

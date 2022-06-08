@@ -78,21 +78,19 @@ def final_result(data, data_result, budget):
         sort_by_score_low.append(stored_score_low[j][0])
         sort_by_score_high.append(stored_score_high[j][0])
     
-    result["price_low_to_high"] = sort_by_price_low
-    result["price_high_to_low"] = sort_by_price_high
-    result["score_high_to_low"] = sort_by_score_low
-    result["score_high_to_low"] = sort_by_score_high
+    result["price_low"] = sort_by_price_low
+    result["price_high"] = sort_by_price_high
+    result["score_low"] = sort_by_score_low
+    result["score_high"] = sort_by_score_high
 
-    table_detail("price_low_to_high", result['price_low_to_high'], budget)
+    for i in result:
+        table_detail(i, result[i], budget)
 
     return result
 
-    # arr = np.array([1, 2, 3, 4, 5])
-    # print(np.sum(arr))
-
 def table_detail(title, data, budget):
     print(f"\n[{title.upper()}]:")
-    data_new = [[x, y[1], y[5], y[4], y[7], y[10]] for x, y in enumerate(data)]
+    data_new = [[x+1, y[1], y[5], y[4], y[7], y[10]] for x, y in enumerate(data)]
     print(tabulate(data_new, headers=["#", "nama", "harga", "penjualan", "bintang", "skor"]))
     price_total = np.sum(np.array([x[6] for x in data]))
     print(f"Total: Rp{price_total}\t\tBudget: Rp{budget}\t\tKurang: Rp{budget-price_total}\n")
