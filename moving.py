@@ -6,6 +6,7 @@ from PIL import ImageTk, Image
 
 LARGEFONT = ("Verdana", 35)
 
+
 class tkinterApp(tk.Tk):
 
     def __init__(self, *args, **kwargs):
@@ -26,18 +27,18 @@ class tkinterApp(tk.Tk):
 
         # iterating through a tuple consisting
         # of the different page layouts
-        for F in (StartPage, Page1, Page2):
+        for F in (Home, Page1, Page2):
 
             frame = F(container, self)
 
             # initializing frame of that object from
-            # startpage, page1, page2 respectively with
+            # Home, page1, page2 respectively with
             # for loop
             self.frames[F] = frame
 
             frame.grid(row=0, column=0, sticky="nsew")
 
-        self.show_frame(StartPage)
+        self.show_frame(Home)
 
     # to display the current frame passed as
     # parameter
@@ -45,12 +46,13 @@ class tkinterApp(tk.Tk):
         frame = self.frames[cont]
         frame.tkraise()
 
-# first window frame startpage
-
-
-class StartPage(tk.Frame):
+# Home Screen
+class Home(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
+
+        # Set background color white
+        self.configure(background="white")
 
         # Home
         logo_angkost = Image.open("./assets/LogoSample_ByTailorBrands.jpg")
@@ -65,38 +67,17 @@ class StartPage(tk.Frame):
         logo_label.pack(pady=(38, 0))
 
         title = Label(self, text="Halo, selamat datang di Angkost", font=Font(
-                    family="Montserrat Medium", size=22, weight="normal"), background="white")
+            family="Montserrat Medium", size=22, weight="normal"), background="white")
         title.pack(pady=(16, 0))
 
-        description = Label(self, text="Angkost akan membantu Anda dalam mencari barang kebutuhan di kost. Silakan tekan tombol di bawah ini untuk melanjutkan.", font=Font(family="Montserrat Medium", size=12), background="white", wraplength=540, justify="center", fg="#4F4F4F")
+        description = Label(self, text="Angkost akan membantu Anda dalam mencari barang kebutuhan di kost. Silakan tekan tombol di bawah ini untuk melanjutkan.", font=Font(
+            family="Montserrat Medium", size=12), background="white", wraplength=540, justify="center", fg="#4F4F4F")
         description.pack(pady=(16, 0), padx=52)
 
         mulai_image = PhotoImage(file="./assets/mulai.png")
-        login_button = Button(self, text='asnajksn', borderwidth=0, bg="white", command=lambda: controller.show_frame(Page1))
+        login_button = Button(self, text='asnajksn', borderwidth=0,
+                              bg="white", command=lambda: controller.show_frame(Page1))
         login_button.pack(pady=(50, 0))
-
-        # # label of frame Layout 2
-        # label = ttk.Label(self, text="Startpage", font=LARGEFONT)
-
-        # # putting the grid in its place by using
-        # # grid
-        # label.grid(row=0, column=4, padx=10, pady=10)
-
-        # button1 = ttk.Button(self, text="Page 1",
-        #                      command=lambda: controller.show_frame(Page1))
-
-        # # putting the button in its place by
-        # # using grid
-        # button1.grid(row=1, column=1, padx=10, pady=10)
-
-        # # button to show frame 2 with text layout2
-        # button2 = ttk.Button(self, text="Page 2",
-        #                      command=lambda: controller.show_frame(Page2))
-
-        # # putting the button in its place by
-        # # using grid
-        # button2.grid(row=2, column=1, padx=10, pady=10)
-
 
 # second window frame page1
 class Page1(tk.Frame):
@@ -109,8 +90,8 @@ class Page1(tk.Frame):
 
         # button to show frame 2 with text
         # layout2
-        button1 = ttk.Button(self, text="StartPage",
-                             command=lambda: controller.show_frame(StartPage))
+        button1 = ttk.Button(self, text="Home",
+                             command=lambda: controller.show_frame(Home))
 
         # putting the button in its place
         # by using grid
@@ -144,8 +125,8 @@ class Page2(tk.Frame):
 
         # button to show frame 3 with text
         # layout3
-        button2 = ttk.Button(self, text="Startpage",
-                             command=lambda: controller.show_frame(StartPage))
+        button2 = ttk.Button(self, text="Home",
+                             command=lambda: controller.show_frame(Home))
 
         # putting the button in its place by
         # using grid
