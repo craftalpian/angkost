@@ -1,11 +1,9 @@
 import tkinter as tk
-from tkinter import Label, ttk as ttk, Button, PhotoImage, Text
+from tkinter import Label, ttk as ttk, Button, PhotoImage, Text, messagebox
 from tkinter.font import Font
 from turtle import home, title, update
 from PIL import ImageTk, Image
-
-LARGEFONT = ("Verdana", 35)
-
+import time
 
 class tkinterApp(tk.Tk):
 
@@ -20,7 +18,7 @@ class tkinterApp(tk.Tk):
 
         self.frames = {}
 
-        for F in (Home, Goods, Page2):
+        for F in (Home, Goods, Budget, Loading):
             frame = F(container, self)
             self.frames[F] = frame
 
@@ -76,6 +74,10 @@ class Goods(tk.Frame):
 
         tk.Frame.__init__(self, parent)
 
+        def proccess():
+            controller.show_frame(Budget)
+            messagebox.showerror(title="Title", message="Test")
+
         # Set background color white
         self.configure(background="white")
 
@@ -95,34 +97,52 @@ class Goods(tk.Frame):
 
         mulai_image = PhotoImage(file="./assets/mulai.png")
         login_button = Button(self, text='asnajksn', borderwidth=0,
-                              bg="white", command=lambda: controller.show_frame(Goods))
+                              bg="white", command=proccess)
         login_button.pack(pady=(50, 0))
 
 
-# third window frame page2
-class Page2(tk.Frame):
+# Budget Screen
+class Budget(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
-        label = ttk.Label(self, text="Page 2", font=LARGEFONT)
-        label.grid(row=0, column=4, padx=10, pady=10)
+        
+        # Set background color white
+        self.configure(background="white")
 
-        # button to show frame 2 with text
-        # layout2
-        button1 = ttk.Button(self, text="Page 1",
-                             command=lambda: controller.show_frame(Goods))
+        # Budget
+        title = Label(self, text="Masukkan budget Anda:", font=Font(
+            family="Montserrat Medium", size=22, weight="normal"), background="white")
+        title.pack(pady=(120, 0))
 
-        # putting the button in its place by
-        # using grid
-        button1.grid(row=1, column=1, padx=10, pady=10)
+        description = Label(self, text="Masukkan budget Anda untuk semua barang tersebut. Harap masukkan dalam rupiah ya!", font=Font(
+            family="Montserrat Medium", size=12), background="white", wraplength=540, justify="center", fg="#4F4F4F")
+        description.pack(pady=(16, 0), padx=52)
 
-        # button to show frame 3 with text
-        # layout3
-        button2 = ttk.Button(self, text="Home",
-                             command=lambda: controller.show_frame(Home))
+        input = Text(self, height=1, width=45, bg="#EDEDED", borderwidth=0,
+                     fg="#625F5F", font=Font(family="Montserrat Regular", size=12))
+        input.config(padx=16, pady=16)
+        input.pack(pady=(30, 0))
 
-        # putting the button in its place by
-        # using grid
-        button2.grid(row=2, column=1, padx=10, pady=10)
+        mulai_image = PhotoImage(file="./assets/mulai.png")
+        login_button = Button(self, text='asnajksn', borderwidth=0,
+                              bg="white", command=lambda: controller.show_frame(Loading))
+        login_button.pack(pady=(50, 0))
+
+# Loading Screen
+class Loading(tk.Frame):
+    def __init__(self, parent, controller):
+        tk.Frame.__init__(self, parent)
+        
+        # Set background color white
+        self.configure(background="white")
+
+        # Budget
+        title = Label(self, text="Angkost sedang memproses...", font=Font(
+            family="Montserrat Medium", size=22, weight="normal"), background="white")
+        title.pack(pady=(250, 0))
+
+        self.after(5000, lambda: controller.show_frame(Budget))
+
 
 
 # Driver Code
