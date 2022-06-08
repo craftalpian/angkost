@@ -1,11 +1,12 @@
 import tkinter as tk
+import time
 from tkinter import Label, ttk as ttk, Button, PhotoImage, Text, messagebox
 from tkinter.font import Font
 from turtle import home, title, update
 from PIL import ImageTk, Image
-import time
+from tokopedia import get_product_info
 
-goods, budget = [], 0
+goods, budget, goods_result = [], 0, []
 
 class tkinterApp(tk.Tk):
 
@@ -82,10 +83,13 @@ class Goods(tk.Frame):
 
             if len(goods_input) < 1:
                 messagebox.showerror(title="Bermasalah!", message="Harap masukkan daftar barang yang Anda inginkan dengan benar!")
+            elif goods_input.count(",") > 4:
+                messagebox.showerror(title="Bermasalah!", message="Harap masukkan daftar barang tidak lebih dari 5!")
             else:
                 controller.show_frame(Budget)
 
                 for i in goods_input.split(","):
+                    print(get_product_info(i.strip())[0]['data']['ace_search_product_v4']['data']['products'][0]['id'])
                     goods.append(i.strip())
 
         # Set background color white
