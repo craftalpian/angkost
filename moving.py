@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter import Label, ttk as ttk, Button, PhotoImage, messagebox
+from tkinter import Label, ttk as ttk, Button, PhotoImage, Text
 from tkinter.font import Font
 from turtle import home, title, update
 from PIL import ImageTk, Image
@@ -16,37 +16,25 @@ class tkinterApp(tk.Tk):
 
         # creating a container
         container = tk.Frame(self)
-        # container.pack(side = "top", fill = "both", expand = True)
         container.pack()
 
-        # container.grid_rowconfigure(0, weight=1)
-        # container.grid_columnconfigure(0, weight=1)
-
-        # initializing frames to an empty array
         self.frames = {}
 
-        # iterating through a tuple consisting
-        # of the different page layouts
-        for F in (Home, Page1, Page2):
-
+        for F in (Home, Goods, Page2):
             frame = F(container, self)
-
-            # initializing frame of that object from
-            # Home, page1, page2 respectively with
-            # for loop
             self.frames[F] = frame
 
             frame.grid(row=0, column=0, sticky="nsew")
 
         self.show_frame(Home)
 
-    # to display the current frame passed as
-    # parameter
     def show_frame(self, cont):
         frame = self.frames[cont]
         frame.tkraise()
 
-# Home Screen
+# Home Page
+
+
 class Home(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
@@ -76,35 +64,39 @@ class Home(tk.Frame):
 
         mulai_image = PhotoImage(file="./assets/mulai.png")
         login_button = Button(self, text='asnajksn', borderwidth=0,
-                              bg="white", command=lambda: controller.show_frame(Page1))
+                              bg="white", command=lambda: controller.show_frame(Goods))
         login_button.pack(pady=(50, 0))
 
-# second window frame page1
-class Page1(tk.Frame):
+# Goods Page
+
+
+class Goods(tk.Frame):
 
     def __init__(self, parent, controller):
 
         tk.Frame.__init__(self, parent)
-        label = ttk.Label(self, text="Page 1", font=LARGEFONT)
-        label.grid(row=0, column=4, padx=10, pady=10)
 
-        # button to show frame 2 with text
-        # layout2
-        button1 = ttk.Button(self, text="Home",
-                             command=lambda: controller.show_frame(Home))
+        # Set background color white
+        self.configure(background="white")
 
-        # putting the button in its place
-        # by using grid
-        button1.grid(row=1, column=1, padx=10, pady=10)
+        # Goods
+        title = Label(self, text="Masukkan daftar barang:", font=Font(
+            family="Montserrat Medium", size=22, weight="normal"), background="white")
+        title.pack(pady=(120, 0))
 
-        # button to show frame 2 with text
-        # layout2
-        button2 = ttk.Button(self, text="Page 2",
-                             command=lambda: controller.show_frame(Page2))
+        description = Label(self, text="Anda dapat memasukkan lebih dari 1 barang dengan menggunakan , (koma) sebagai pemisah. Maksimal 5 barang.", font=Font(
+            family="Montserrat Medium", size=12), background="white", wraplength=540, justify="center", fg="#4F4F4F")
+        description.pack(pady=(16, 0), padx=52)
 
-        # putting the button in its place by
-        # using grid
-        button2.grid(row=2, column=1, padx=10, pady=10)
+        input = Text(self, height=5, width=45, bg="#EDEDED", borderwidth=0,
+                     fg="#625F5F", font=Font(family="Montserrat Regular", size=12))
+        input.config(padx=16, pady=16)
+        input.pack(pady=(30, 0))
+
+        mulai_image = PhotoImage(file="./assets/mulai.png")
+        login_button = Button(self, text='asnajksn', borderwidth=0,
+                              bg="white", command=lambda: controller.show_frame(Goods))
+        login_button.pack(pady=(50, 0))
 
 
 # third window frame page2
@@ -117,7 +109,7 @@ class Page2(tk.Frame):
         # button to show frame 2 with text
         # layout2
         button1 = ttk.Button(self, text="Page 1",
-                             command=lambda: controller.show_frame(Page1))
+                             command=lambda: controller.show_frame(Goods))
 
         # putting the button in its place by
         # using grid
