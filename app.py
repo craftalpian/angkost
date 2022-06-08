@@ -5,8 +5,9 @@ from tkinter.font import Font
 from turtle import home, title, update
 from PIL import ImageTk, Image
 from tokopedia import get_product_info
+from data import extract_data, final_result
 
-goods, budget, goods_result = [], 0, []
+budget, goods, goods_result = 0, [], []
 
 class tkinterApp(tk.Tk):
 
@@ -86,11 +87,13 @@ class Goods(tk.Frame):
             elif goods_input.count(",") > 4:
                 messagebox.showerror(title="Bermasalah!", message="Harap masukkan daftar barang tidak lebih dari 5!")
             else:
-                controller.show_frame(Budget)
-
                 for i in goods_input.split(","):
-                    print(get_product_info(i.strip())[0]['data']['ace_search_product_v4']['data']['products'][0]['id'])
                     goods.append(i.strip())
+                    goods_result.append(extract_data(get_product_info(i.strip())[0]['data']['ace_search_product_v4']['data']['products']))
+
+                messagebox.showinfo(title="Angkost", message="Berhasil melakukan pengambilan data...")
+                
+                controller.show_frame(Budget)
 
         # Set background color white
         self.configure(background="white")
@@ -134,10 +137,14 @@ class Budget(tk.Frame):
                         global budget
                         budget = int(budget_input)
 
-                        time.sleep(5)
-                        controller.show_frame(Loading)
-                except:
-                        messagebox.showwarning(title="Bermasalah!", message="Masukkan budget dengan angka!")
+                        final_result(goods, goods_result, budget)
+
+
+                        # time.sleep(5)
+                        # controller.show_frame(Loading)
+                except Exception as e:
+                    print(e)
+                    messagebox.showwarning(title="Bermasalah!", message="Masukkan budget dengan angka!")
 
         # Set background color white
         self.configure(background="white")
@@ -222,3 +229,5 @@ app.configure(background="white")
 
 # Loop app
 app.mainloop()
+
+# print(goods_result)
