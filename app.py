@@ -3,9 +3,6 @@ from tkinter import Label, ttk as ttk, Button, Text, messagebox
 from tkinter.font import Font
 from tokopedia import get_product_info
 from data import extract_data, final_result
-from cProfile import label
-from PIL import ImageTk
-from urllib.request import urlopen
 
 budget, goods, goods_result, result_data = 0, [], [], []
 
@@ -68,7 +65,7 @@ class Home(tk.Frame):
 
         # Start button
         start_button = Button(self, text="Mulai", borderwidth=0,
-                              bg="#525252", fg="white", command=lambda: controller.show_frame(Result), width=16, height=1, font=Font(
+                              bg="#525252", fg="white", command=lambda: controller.show_frame(Goods), width=16, height=1, font=Font(
                                   family="Montserrat Bold", size=12, weight="normal"))
         start_button.pack(pady=(60, 0))
 
@@ -184,45 +181,42 @@ class Result(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
 
+        data = []
+
+        def proccess():
+            global data
+            data = result_data['price_low']
+            print("result_data", result_data)
+            print("budget", budget)
+            print("goods", goods)
+            print("goods_result", goods_result)
+
+        def product(self):
+            product_title = Label(self, text="✅ Bangku Belajar Ikea", font=Font(
+            family="Montserrat SemiBold", size=12, weight="normal"), fg="#353535", background="white")
+            product_title.pack(pady=(20, 5), padx=20, side=tk.TOP, anchor="w")
+
+            price_title = Label(self, text="Rp350.000", font=Font(
+                family="Montserrat Medium", size=10, weight="normal"), fg="#636262", background="white")
+            price_title.pack(pady=(0, 0), padx=20, side=tk.TOP, anchor="w")
+
         # Set background color white
         self.configure(background="white")
 
         # Budget
         title = Label(self, text="Angkost menemukan hasil:", font=Font(
             family="Montserrat Medium", size=22, weight="normal"), background="white")
-        title.pack(pady=(60, 0), padx=20, side=tk.TOP, anchor="w")
+        title.pack(pady=(30, 0), padx=20, side=tk.TOP, anchor="w")
 
-        description = Label(self, text="Daftar yang ditampilkan adalah barang termurah", font=Font(
+        description = Label(self, text="Klik 'Tampilkan' untuk menampilkan barang termurah", font=Font(
             family="Montserrat Medium", size=10), background="white", wraplength=540, justify="center", fg="#4F4F4F")
         description.pack(pady=(4, 0), padx=20, side=tk.TOP, anchor="w")
 
-        # IMAGE
-        imageUrl = "https://www.pythontutorial.net/wp-content/uploads/2021/01/Tkinter-grid-Sticky-EW.png"
-        u = urlopen(imageUrl)
-        raw_data = u.read()
-        u.close()
+        for i in data:
+            product()
 
-        photo = ImageTk.PhotoImage(data=raw_data)
-        label = tk.Label(self, image=photo)
-        label.image = photo
-        label.config(height=40, width=40)
-        label.pack(pady=(4, 0), padx=20, side=tk.TOP, anchor="w")
-
-        product_title = Label(self, text="Bangku Belajar Ikea", font=Font(
-            family="Montserrat SemiBold", size=12, weight="normal"), fg="#353535", background="white")
-        product_title.pack(pady=(20, 5), padx=20, side=tk.TOP, anchor="w")
-
-        price_title = Label(self, text="Rp350.000", font=Font(
-            family="Montserrat Medium", size=10, weight="normal"), fg="#636262", background="white")
-        price_title.pack(pady=(0, 0), padx=20, side=tk.TOP, anchor="w")
-
-        # l = Button(self, text="Left")
-        # l.place(x=50, y=50)
-        # m = Button(self, text="Middle")
-        # m.place(x=70, y=50)
-
-        login_button = Button(self, text='asnajksn', borderwidth=0,
-                              bg="white", command=lambda: controller.show_frame(Home))
+        login_button = Button(self, text='Tampilkan', borderwidth=0,
+                              bg="white", command=proccess)
         login_button.pack(pady=(50, 0))
 
 

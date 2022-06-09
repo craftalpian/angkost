@@ -1,9 +1,19 @@
 import numpy as np
 from tabulate import tabulate
+import bitly_api
+
+def shorten_url(url):
+    BITLY_ACCESS_TOKEN = "6ec43aa95e89e7ba69286b89992abe0d7587291a"
+    
+    x = bitly_api.Connection(access_token = BITLY_ACCESS_TOKEN)
+
+    return x.shorten(url)
 
 def format_price(amount) -> int:
     return int(amount.lower().replace('rp', '').replace('.', ''))
 
+def thousand_format(amount) -> str:
+    return '{:,}'.format(amount).replace(',', '.')
 
 def scoring_badge(badge):
     if len(badge) < 1:
@@ -90,7 +100,7 @@ def final_result(data, data_result, budget):
 
 def table_detail(title, data, budget):
     print(f"\n[{title.upper()}]:")
-    data_new = [[x+1, y[1], y[5], y[4], y[7], y[10]] for x, y in enumerate(data)]
-    print(tabulate(data_new, headers=["#", "nama", "harga", "penjualan", "bintang", "skor"]))
+    data_new = [[x+1, y[1], shorten_url(y[1]), y[5], y[4], y[7], y[10]] for x, y in enumerate(data)]
+    print(tabulate(data_new, headers=["#", "nama", "url", "harga", "penjualan", "bintang", "skor"]))
     price_total = np.sum(np.array([x[6] for x in data]))
-    print(f"\nTotal: Rp{price_total}\t\tBudget: Rp{budget}\t\tKurang: Rp{budget-price_total}\n")
+    print(f"\nTotal: Rp{thousand_format(price_total)}\t\tBudget: Rp{thousand_format(budget)}\t\tSelisih: Rp{thousand_format(budget-price_total)}\n")
