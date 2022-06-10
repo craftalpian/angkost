@@ -2,9 +2,11 @@ import tkinter as tk
 from tkinter import Label, ttk as ttk, Button, Text, messagebox
 from tkinter.font import Font
 from tokopedia import get_product_info
-from data import extract_data, final_result, short
+from data import extract_data, final_result, short, thousand_format
+import webbrowser
 
 budget, goods, goods_result, result_data = 0, [], [], []
+
 
 class tkinterApp(tk.Tk):
 
@@ -181,12 +183,67 @@ class Result(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
 
+        default_url = "https://www.tokopedia.com/"
+
         def proccess():
+            # Update product link
             data = result_data['price_low']
 
-            # Data produk pertama
-            product_title_1.config(text=f"✅ {short(data[0][1])}")
-            product_price_1.config(text=f"{short(data[0][5])}")
+            try:
+                product_title_1.configure(command=lambda: webbrowser.open(data[0][8]))
+
+                # Data produk pertama
+                product_title_1.config(text=f"✅ {short(data[0][1])}")
+                product_price_1.config(text=f"{short(data[0][5])}")
+            except:
+                print("=> Tidak terdapat produk pertama")
+
+            try:
+                product_title_2.configure(command=lambda: webbrowser.open(data[1][8]))
+
+                # Data produk kedua
+                product_title_2.config(text=f"✅ {short(data[1][1])}")
+                product_price_2.config(text=f"{short(data[1][5])}")
+            except:
+                print("=> Tidak terdapat produk kedua")
+                
+            try:
+                product_title_3.configure(command=lambda: webbrowser.open(data[2][8]))
+
+                # Data produk ketiga
+                product_title_3.config(text=f"✅ {short(data[2][1])}")
+                product_price_3.config(text=f"{short(data[2][5])}")
+            except:
+                print("=> Tidak terdapat produk ketiga")
+
+            try:
+                product_title_4.configure(command=lambda: webbrowser.open(data[3][8]))
+
+                # Data produk keempat
+                product_title_4.config(text=f"✅ {short(data[3][1])}")
+                product_price_4.config(text=f"{short(data[3][5])}")
+            except:
+                print("=> Tidak terdapat produk keempat")
+
+            try:
+                product_title_5.configure(command=lambda: webbrowser.open(data[4][8]))
+
+                # Data produk kelima
+                product_title_5.config(text=f"✅ {short(data[4][1])}")
+                product_price_5.config(text=f"{short(data[4][5])}")
+            except:
+                print("=> Tidak terdapat produk kelima")
+
+            price_amount = data[0][6] + data[1][6] + data[2][6] + data[3][6] + data[4][6]
+
+            if price_amount > budget:
+                message = f"(Anda membutuhkan tambahan sebesar Rp{thousand_format(price_amount-budget)})"
+            elif price_amount < budget:
+                message = f"(Anda untung sebesar Rp{thousand_format(budget-price_amount)})"
+            else:
+                message = f"(Budget Anda sesuai!)"
+
+            total_price.config(text=f"Total: Rp{thousand_format(price_amount)} {message}")
 
         # Set background color white
         self.configure(background="white")
@@ -196,48 +253,57 @@ class Result(tk.Frame):
             family="Montserrat Medium", size=22, weight="normal"), background="white")
         title.pack(pady=(30, 0), padx=20, side=tk.TOP, anchor="w")
 
-        description = Label(self, text="Klik 'Tampilkan' untuk menampilkan barang termurah", font=Font(
-            family="Montserrat Medium", size=10), background="white", wraplength=540, justify="center", fg="#4F4F4F")
+        description = Label(self, text="Klik 'Tampilkan' untuk menampilkan barang rekomendasi kami. Hasil lain akan tersimpan di file angkost_result.xls", font=Font(
+            family="Montserrat Medium", size=10), background="white", wraplength=540, justify="left", fg="#4F4F4F")
         description.pack(pady=(4, 0), padx=20, side=tk.TOP, anchor="w")
 
-        product_title_1 = Label(self, text="❌ Produk #1", font=Font(
-        family="Montserrat SemiBold", size=12, weight="normal"), fg="#353535", background="white")
+        product_title_1 = Button(self, text="❌ Produk #1", font=Font(
+            family="Montserrat SemiBold", size=12, weight="normal"), fg="#353535", background="white", borderwidth=0, command=lambda: webbrowser.open(default_url))
         product_title_1.pack(pady=(20, 5), padx=20, side=tk.TOP, anchor="w")
 
-        product_price_1 = Label(self, text="Rp0", font=Font(family="Montserrat Medium", size=10, weight="normal"), fg="#636262", background="white")
+        product_price_1 = Label(self, text="Rp0", font=Font(
+            family="Montserrat Medium", size=10, weight="normal"), fg="#636262", background="white")
         product_price_1.pack(pady=(0, 0), padx=20, side=tk.TOP, anchor="w")
 
-        product_title_2 = Label(self, text="❌ Produk #2", font=Font(
-        family="Montserrat SemiBold", size=12, weight="normal"), fg="#353535", background="white")
+        product_title_2 = Button(self, text="❌ Produk #2", font=Font(
+            family="Montserrat SemiBold", size=12, weight="normal"), fg="#353535", background="white", borderwidth=0, command=lambda: webbrowser.open(default_url))
         product_title_2.pack(pady=(20, 5), padx=20, side=tk.TOP, anchor="w")
 
-        product_price_2 = Label(self, text="Rp0", font=Font(family="Montserrat Medium", size=10, weight="normal"), fg="#636262", background="white")
+        product_price_2 = Label(self, text="Rp0", font=Font(
+            family="Montserrat Medium", size=10, weight="normal"), fg="#636262", background="white")
         product_price_2.pack(pady=(0, 0), padx=20, side=tk.TOP, anchor="w")
 
-        product_title_3 = Label(self, text="❌ Produk #3", font=Font(
-        family="Montserrat SemiBold", size=12, weight="normal"), fg="#353535", background="white")
+        product_title_3 = Button(self, text="❌ Produk #3", font=Font(
+            family="Montserrat SemiBold", size=12, weight="normal"), fg="#353535", background="white", borderwidth=0, command=lambda: webbrowser.open(default_url))
         product_title_3.pack(pady=(20, 5), padx=20, side=tk.TOP, anchor="w")
 
-        product_price_3 = Label(self, text="Rp0", font=Font(family="Montserrat Medium", size=10, weight="normal"), fg="#636262", background="white")
+        product_price_3 = Label(self, text="Rp0", font=Font(
+            family="Montserrat Medium", size=10, weight="normal"), fg="#636262", background="white")
         product_price_3.pack(pady=(0, 0), padx=20, side=tk.TOP, anchor="w")
 
-        product_title_4 = Label(self, text="❌ Produk #4", font=Font(
-        family="Montserrat SemiBold", size=12, weight="normal"), fg="#353535", background="white")
+        product_title_4 = Button(self, text="❌ Produk #4", font=Font(
+            family="Montserrat SemiBold", size=12, weight="normal"), fg="#353535", background="white", borderwidth=0, command=lambda: webbrowser.open(default_url))
         product_title_4.pack(pady=(20, 5), padx=20, side=tk.TOP, anchor="w")
 
-        product_price_4 = Label(self, text="Rp0", font=Font(family="Montserrat Medium", size=10, weight="normal"), fg="#636262", background="white")
+        product_price_4 = Label(self, text="Rp0", font=Font(
+            family="Montserrat Medium", size=10, weight="normal"), fg="#636262", background="white")
         product_price_4.pack(pady=(0, 0), padx=20, side=tk.TOP, anchor="w")
 
-        product_title_5 = Label(self, text="❌ Produk #5", font=Font(
-        family="Montserrat SemiBold", size=12, weight="normal"), fg="#353535", background="white")
+        product_title_5 = Button(self, text="❌ Produk #5", font=Font(
+            family="Montserrat SemiBold", size=12, weight="normal"), fg="#353535", background="white", borderwidth=0, command=lambda: webbrowser.open(default_url))
         product_title_5.pack(pady=(20, 5), padx=20, side=tk.TOP, anchor="w")
 
-        product_price_5 = Label(self, text="Rp0", font=Font(family="Montserrat Medium", size=10, weight="normal"), fg="#636262", background="white")
+        product_price_5 = Label(self, text="Rp0", font=Font(
+            family="Montserrat Medium", size=10, weight="normal"), fg="#636262", background="white")
         product_price_5.pack(pady=(0, 0), padx=20, side=tk.TOP, anchor="w")
 
-        show_button = Button(self, text="Selanjutnya", borderwidth=0,
-                             bg="#525252", fg="white", command=proccess, width=16, height=1, font=Font( family="Montserrat Bold", size=12, weight="normal"))
-        show_button.pack(pady=(50, 0))
+        total_price = Label(self, text="Total: Rp0", font=Font(
+            family="Montserrat Regular", size=12, weight="normal"), fg="#333333", background="white")
+        total_price.pack(pady=(20, 5), padx=20, side=tk.TOP, anchor="w")
+
+        show_button = Button(self, text="Tampilkan", borderwidth=0,
+                             bg="#525252", fg="white", command=proccess, width=16, height=1, font=Font(family="Montserrat Bold", size=12, weight="normal"))
+        show_button.pack(pady=(30, 0))
 
 
 # Driver Code
@@ -245,7 +311,7 @@ app = tkinterApp()
 
 # Styling app
 app.title("Angkost")
-app.geometry("680x600")
+app.geometry("680x690")
 app.resizable(False, True)
 app.iconbitmap("./assets/angkost-icon.ico")
 app.configure(background="white")
