@@ -1,6 +1,8 @@
 import numpy as np
 from tabulate import tabulate
 import pyshorteners
+from openpyxl import Workbook
+from openpyxl.styles import Font, Fill
 
 def shorten_url(url) -> str:
     type_tiny = pyshorteners.Shortener()
@@ -39,7 +41,7 @@ def extract_data(data):
 
     for i, j in enumerate(data):
         if i <= 4:
-            data_store.append([j['id'], j['name'], j['badges'], scoring_badge(j['badges']), j['countReview'], j['price'], format_price(j['price']), j['ratingAverage'],
+            data_store.append([j['id'], j['name'], "null", scoring_badge(j['badges']), j['countReview'], j['price'], format_price(j['price']), j['ratingAverage'],
                               j['url'], scoring_product(j['countReview'], j['ratingAverage']), scoring_product(j['countReview'], j['ratingAverage'])+scoring_badge(j['badges'])])
 
     return data_store
@@ -93,6 +95,47 @@ def final_result(data, data_result, budget):
     result["price_high"] = sort_by_price_high
     result["score_low"] = sort_by_score_low
     result["score_high"] = sort_by_score_high
+
+    wb = Workbook()
+
+    # Worksheet 1
+    ws1 = wb.active
+    ws1.title = "LOW_PRICE (ANGKOST)"
+    ws1.sheet_properties.tabColor = "83A9AC"
+
+    ws1.append(["Id Produk", "Nama Produk", "Harga Produk", "Bintang Produk", "Link Produk", "Skor Produk"])
+
+    for i in sort_by_price_low:
+        ws1.append([i[0], i[1], i[5], i[7], i[8], i[9]])
+
+    ws2 = wb.create_sheet("HIGH_PRICE (ANGKOST)")
+
+    ws2.sheet_properties.tabColor = "D4D39B"
+
+    ws2.append(["Id Produk", "Nama Produk", "Harga Produk", "Bintang Produk", "Link Produk", "Skor Produk"])
+
+    for i in sort_by_price_high:
+        ws2.append([i[0], i[1], i[5], i[7], i[8], i[9]])
+    
+    ws3 = wb.create_sheet("LOW_SCORE (ANGKOST)")
+
+    ws3.sheet_properties.tabColor = "C9A992"
+
+    ws3.append(["Id Produk", "Nama Produk", "Harga Produk", "Bintang Produk", "Link Produk", "Skor Produk"])
+
+    for i in sort_by_score_low:
+        ws3.append([i[0], i[1], i[5], i[7], i[8], i[9]])
+    
+    ws4 = wb.create_sheet("HIGH_SCORE (ANGKOST)")
+
+    ws4.sheet_properties.tabColor = "242A30"
+
+    ws4.append(["Id Produk", "Nama Produk", "Harga Produk", "Bintang Produk", "Link Produk", "Skor Produk"])
+
+    for i in sort_by_score_high:
+        ws4.append([i[0], i[1], i[5], i[7], i[8], i[9]])
+
+    wb.save(filename = "angkost_result.xlsx")
 
     for i in result:
         table_detail(i, result[i], budget)

@@ -233,8 +233,11 @@ class Result(tk.Frame):
                 product_price_5.config(text=f"{short(data[4][5])}")
             except:
                 print("=> Tidak terdapat produk kelima")
+            
+            price_amount = 0
 
-            price_amount = data[0][6] + data[1][6] + data[2][6] + data[3][6] + data[4][6]
+            for i in data:
+                price_amount += i[6]
 
             if price_amount > budget:
                 message = f"(Anda membutuhkan tambahan sebesar Rp{thousand_format(price_amount-budget)})"
@@ -253,7 +256,7 @@ class Result(tk.Frame):
             family="Montserrat Medium", size=22, weight="normal"), background="white")
         title.pack(pady=(30, 0), padx=20, side=tk.TOP, anchor="w")
 
-        description = Label(self, text="Klik 'Tampilkan' untuk menampilkan barang rekomendasi kami. Hasil lain akan tersimpan di file angkost_result.xls", font=Font(
+        description = Label(self, text="Klik 'Tampilkan' untuk menampilkan barang rekomendasi kami. Hasil lain akan tersimpan di file angkost_result.xlsx", font=Font(
             family="Montserrat Medium", size=10), background="white", wraplength=540, justify="left", fg="#4F4F4F")
         description.pack(pady=(4, 0), padx=20, side=tk.TOP, anchor="w")
 
