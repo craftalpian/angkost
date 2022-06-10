@@ -2,7 +2,7 @@ import tkinter as tk
 from tkinter import Label, ttk as ttk, Button, Text, messagebox
 from tkinter.font import Font
 from tokopedia import get_product_info
-from data import extract_data, final_result
+from data import extract_data, final_result, short
 
 budget, goods, goods_result, result_data = 0, [], [], []
 
@@ -181,24 +181,12 @@ class Result(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
 
-        data = []
-
         def proccess():
-            global data
             data = result_data['price_low']
-            print("result_data", result_data)
-            print("budget", budget)
-            print("goods", goods)
-            print("goods_result", goods_result)
 
-        def product(self):
-            product_title = Label(self, text="✅ Bangku Belajar Ikea", font=Font(
-            family="Montserrat SemiBold", size=12, weight="normal"), fg="#353535", background="white")
-            product_title.pack(pady=(20, 5), padx=20, side=tk.TOP, anchor="w")
-
-            price_title = Label(self, text="Rp350.000", font=Font(
-                family="Montserrat Medium", size=10, weight="normal"), fg="#636262", background="white")
-            price_title.pack(pady=(0, 0), padx=20, side=tk.TOP, anchor="w")
+            # Data produk pertama
+            product_title_1.config(text=f"✅ {short(data[0][1])}")
+            product_price_1.config(text=f"{short(data[0][5])}")
 
         # Set background color white
         self.configure(background="white")
@@ -212,12 +200,44 @@ class Result(tk.Frame):
             family="Montserrat Medium", size=10), background="white", wraplength=540, justify="center", fg="#4F4F4F")
         description.pack(pady=(4, 0), padx=20, side=tk.TOP, anchor="w")
 
-        for i in data:
-            product()
+        product_title_1 = Label(self, text="❌ Produk #1", font=Font(
+        family="Montserrat SemiBold", size=12, weight="normal"), fg="#353535", background="white")
+        product_title_1.pack(pady=(20, 5), padx=20, side=tk.TOP, anchor="w")
 
-        login_button = Button(self, text='Tampilkan', borderwidth=0,
-                              bg="white", command=proccess)
-        login_button.pack(pady=(50, 0))
+        product_price_1 = Label(self, text="Rp0", font=Font(family="Montserrat Medium", size=10, weight="normal"), fg="#636262", background="white")
+        product_price_1.pack(pady=(0, 0), padx=20, side=tk.TOP, anchor="w")
+
+        product_title_2 = Label(self, text="❌ Produk #2", font=Font(
+        family="Montserrat SemiBold", size=12, weight="normal"), fg="#353535", background="white")
+        product_title_2.pack(pady=(20, 5), padx=20, side=tk.TOP, anchor="w")
+
+        product_price_2 = Label(self, text="Rp0", font=Font(family="Montserrat Medium", size=10, weight="normal"), fg="#636262", background="white")
+        product_price_2.pack(pady=(0, 0), padx=20, side=tk.TOP, anchor="w")
+
+        product_title_3 = Label(self, text="❌ Produk #3", font=Font(
+        family="Montserrat SemiBold", size=12, weight="normal"), fg="#353535", background="white")
+        product_title_3.pack(pady=(20, 5), padx=20, side=tk.TOP, anchor="w")
+
+        product_price_3 = Label(self, text="Rp0", font=Font(family="Montserrat Medium", size=10, weight="normal"), fg="#636262", background="white")
+        product_price_3.pack(pady=(0, 0), padx=20, side=tk.TOP, anchor="w")
+
+        product_title_4 = Label(self, text="❌ Produk #4", font=Font(
+        family="Montserrat SemiBold", size=12, weight="normal"), fg="#353535", background="white")
+        product_title_4.pack(pady=(20, 5), padx=20, side=tk.TOP, anchor="w")
+
+        product_price_4 = Label(self, text="Rp0", font=Font(family="Montserrat Medium", size=10, weight="normal"), fg="#636262", background="white")
+        product_price_4.pack(pady=(0, 0), padx=20, side=tk.TOP, anchor="w")
+
+        product_title_5 = Label(self, text="❌ Produk #5", font=Font(
+        family="Montserrat SemiBold", size=12, weight="normal"), fg="#353535", background="white")
+        product_title_5.pack(pady=(20, 5), padx=20, side=tk.TOP, anchor="w")
+
+        product_price_5 = Label(self, text="Rp0", font=Font(family="Montserrat Medium", size=10, weight="normal"), fg="#636262", background="white")
+        product_price_5.pack(pady=(0, 0), padx=20, side=tk.TOP, anchor="w")
+
+        show_button = Button(self, text="Selanjutnya", borderwidth=0,
+                             bg="#525252", fg="white", command=proccess, width=16, height=1, font=Font( family="Montserrat Bold", size=12, weight="normal"))
+        show_button.pack(pady=(50, 0))
 
 
 # Driver Code
