@@ -2,7 +2,7 @@ import tkinter as tk
 from tkinter import Label, ttk as ttk, Button, Text, messagebox
 from tkinter.font import Font
 from tokopedia import get_product_info
-from data import extract_data, final_result, short, thousand_format
+from data import extract_data, final_result, short, thousand_format, clear
 import webbrowser
 
 budget, goods, goods_result, result_data = 0, [], [], []
@@ -83,6 +83,9 @@ class Goods(tk.Frame):
         def proccess():
             goods_input = input.get("1.0", "end-1c")
 
+            # Clear result files
+            clear()
+
             if len(goods_input) < 1:
                 messagebox.showerror(
                     title="Bermasalah!", message="Harap masukkan daftar barang yang Anda inginkan dengan benar!")
@@ -92,8 +95,7 @@ class Goods(tk.Frame):
             else:
                 for i in goods_input.split(","):
                     goods.append(i.strip())
-                    goods_result.append(extract_data(get_product_info(i.strip())[
-                                        0]['data']['ace_search_product_v4']['data']['products']))
+                    goods_result.append(extract_data(get_product_info(i.strip())[0]['data']['ace_search_product_v4']['data']['products'], i.strip()))
 
                 messagebox.showinfo(
                     title="Angkost", message="Berhasil melakukan pengambilan data...")

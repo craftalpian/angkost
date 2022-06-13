@@ -3,6 +3,9 @@ from tabulate import tabulate
 import pyshorteners
 from openpyxl import Workbook
 from openpyxl.styles import Font, Fill
+import csv
+import os
+import glob
 
 def shorten_url(url) -> str:
     type_tiny = pyshorteners.Shortener()
@@ -11,6 +14,11 @@ def shorten_url(url) -> str:
         return type_tiny.tinyurl.short(url)
     except:
         return "Tidak terdapat url"
+
+def clear():
+    files = glob.glob("./data/*")
+    for f in files:
+        os.remove(f)
 
 def format_price(amount) -> int:
     return int(amount.lower().replace('rp', '').replace('.', ''))
@@ -36,7 +44,7 @@ def scoring_product(count_review, rating_average):
     return score
 
 
-def extract_data(data):
+def extract_data(data, product_name):
     data_store = []
 
     for i, j in enumerate(data):
@@ -44,12 +52,38 @@ def extract_data(data):
             data_store.append([j['id'], j['name'], "null", scoring_badge(j['badges']), j['countReview'], j['price'], format_price(j['price']), j['ratingAverage'],
                               j['url'], scoring_product(j['countReview'], j['ratingAverage']), scoring_product(j['countReview'], j['ratingAverage'])+scoring_badge(j['badges'])])
 
+    # Storing csv data
+    with open(f"./data/result-{product_name}.csv", "w+", newline="") as file:
+        writer = csv.writer(file)
+        writer.writerows(data_store)
+    
     return data_store
 
-def final_result(data, data_result, budget):
-    # Count product
-    count = len(data)
+# def recommendation_product():
+#     result = []
+    
+#     # Get all list of result
+#     files = glob.glob("./data/*")
+#     for f in files:
+#         data = []
+#         with open(f, 'r') as csvfile:
+#             plots = csv.reader(csvfile, delimiter=',')
+#             for row in plots:
+#                 data.append(row)
+#         result.append(data)
+    
+#     print(result)
 
+def recommendation_recipe(data):
+    for x in data:
+        price = 0
+        for i in x:
+            price += i[6]
+        price_avg = price/len(x)
+
+
+
+def final_result(data, data_result, budget):
     # Storage (by price - LOW)
     stored_price_low = {}
 
@@ -62,8 +96,7 @@ def final_result(data, data_result, budget):
     # Storage (by score - HIGH)
     stored_score_high = {}
 
-    # Final result
-    result = {}
+    recommendation_recipe(data_result)
 
     for x, y in enumerate(data_result):
         stored_price_low[data[x]] = sorted(y, key=lambda x: x[6], reverse=False)
