@@ -122,8 +122,11 @@ def recommendation_system(data, budget):
         for a in new_product:
             result_product.append([a[0], a[1], a[2], a[3], a[4], a[5],
                                   a[6], a[7], a[8], a[9], a[10], a[11], float(a[11]/a[4])])
+
         for b, c in enumerate(result_product):
-            sort_from_small.append([c[0], c[1], c[2], c[3], c[4], c[5], c[6], c[7], c[8], c[9], c[10], c[11], float(a[11]/a[4])])
+            sort_from_small.append([c[0], c[1], c[2], c[3], c[4], c[5], c[6], c[7], c[8], c[9], c[10], c[11], c[12], result_product[len(result_product)-1-b][12]])
+        
+        print("sort_from_small", sort_from_small)
 
 
 def final_result(data, data_result, budget):
