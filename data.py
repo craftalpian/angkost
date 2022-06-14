@@ -30,6 +30,17 @@ def format_price(amount) -> int:
 def thousand_format(amount) -> str:
     return '{:,}'.format(amount).replace(',', '.')
 
+def badge(badge):
+    if len(badge) < 1:
+        return 'Basic'
+    else:
+        title = badge[0]['title']
+        if title == "Official Store":
+            return 'Official Store'
+        elif title == "Power Merchant Pro Badge":
+            return 'Power Merchant Pro Badge'
+        else:
+            return 'Basic'
 
 def scoring_badge(badge):
     if len(badge) < 1:
@@ -71,7 +82,7 @@ def extract_data(data, product_name):
     for i, j in enumerate(data):
         if i <= 4:
             data_store.append([j['id'], j['name'], "null", scoring_badge(j['badges']), j['countReview'], j['price'], format_price(j['price']), j['ratingAverage'],
-                              j['url'], scoring_product(j['countReview'], j['ratingAverage']), scoring_product(j['countReview'], j['ratingAverage'])+scoring_badge(j['badges']), sell_count(j['labelGroups'])])
+                              j['url'], scoring_product(j['countReview'], j['ratingAverage']), scoring_product(j['countReview'], j['ratingAverage'])+scoring_badge(j['badges']), badge(j['badges']), sell_count(j['labelGroups'])])
 
     # Storing csv data
     with open(f"./data/result-{product_name}.csv", "w+", newline="") as file:
@@ -104,9 +115,10 @@ def extract_data(data, product_name):
 
 
 def recommendation_system(data, budget):
+    res = []
     for x in data:
         # Product-n
-        prices_sum, new_product, data_product, result_product, before, sort_from_small = 0, [], [], [], [], []
+        prices_sum, new_product, data_product, result_product, add_point_bonus, sort_from_small = 0, [], [], [], [], []
         for i in x:
             data_product.append(i)
             prices_sum += i[6]
@@ -121,12 +133,31 @@ def recommendation_system(data, budget):
 
         for a in new_product:
             result_product.append([a[0], a[1], a[2], a[3], a[4], a[5],
-                                  a[6], a[7], a[8], a[9], a[10], a[11], float(a[11]/a[4])])
+                                  a[6], a[7], a[8], a[9], a[10], a[11], a[12], float(a[12]/a[4])])
 
         for b, c in enumerate(result_product):
-            sort_from_small.append([c[0], c[1], c[2], c[3], c[4], c[5], c[6], c[7], c[8], c[9], c[10], c[11], c[12], result_product[len(result_product)-1-b][12]])
-        
-        print("sort_from_small", sort_from_small)
+            sort_from_small.append([c[0], c[1], c[2], c[3], c[4], c[5], c[6], c[7], c[8],
+                                   c[9], c[10], c[11], c[12], c[13], result_product[len(result_product)-1-b][13]])
+
+        point = 0
+        for k in sort_from_small:
+            point += k[14]
+        avg_point = point/len(sort_from_small)
+
+        for u in sort_from_small:
+            bonus = 0
+            if u[11] == "Official Store":
+                bonus = avg_point*1.0
+            elif u[11] == "Power Merchant Pro Badge":
+                bonus = avg_point*0.75
+            else:
+                bonus = avg_point*0.5
+
+            add_point_bonus.append([u[0], u[1], u[2], u[3], u[4], u[5], u[6], u[7], u[8], u[9], u[10], u[11], u[12], u[13], u[14]+bonus])
+        last = sorted(add_point_bonus, key=lambda x: x[14], reverse=True)
+
+        res.append(last[0])
+    return res
 
 
 def final_result(data, data_result, budget):
@@ -142,7 +173,6 @@ def final_result(data, data_result, budget):
     # Storage (by score - HIGH)
     stored_score_high = {}
 
-    # print("data_result", data_result)
     rec_system = recommendation_system(data_result, budget)
 
     for x, y in enumerate(data_result):
@@ -179,6 +209,7 @@ def final_result(data, data_result, budget):
     result["price_high"] = sort_by_price_high
     result["score_low"] = sort_by_score_low
     result["score_high"] = sort_by_score_high
+    result["recommendation"] = rec_system
 
     wb = Workbook()
 
@@ -222,6 +253,16 @@ def final_result(data, data_result, budget):
 
     for i in sort_by_score_high:
         ws4.append([i[0], i[1], i[5], i[7], i[8], i[9]])
+
+    ws5 = wb.create_sheet("RECOMMENDATION (ANGKOST)")
+
+    ws5.sheet_properties.tabColor = "FFC400"
+
+    ws5.append(["Id Produk", "Nama Produk", "Harga Produk",
+               "Bintang Produk", "Link Produk", "Skor Produk (Rekomendasi)"])
+
+    for i in rec_system:
+        ws5.append([i[0], i[1], i[5], i[7], i[8], i[14]])
 
     wb.save(filename="angkost_result.xlsx")
 

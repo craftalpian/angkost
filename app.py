@@ -189,7 +189,7 @@ class Result(tk.Frame):
 
         def proccess():
             # Update product link
-            data = result_data['price_low']
+            data = result_data['recommendation']
 
             try:
                 product_title_1.configure(command=lambda: webbrowser.open(data[0][8]))
