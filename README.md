@@ -1,1 +1,2 @@
-"# angkost" 
+# Angkost
+`py app.py`
